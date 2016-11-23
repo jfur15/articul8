@@ -29,11 +29,13 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.URLTextBox = new System.Windows.Forms.TextBox();
+            this.URLTextBox1 = new System.Windows.Forms.TextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.URLTextBox2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -45,22 +47,22 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Get Source Code";
+            this.button1.Text = "Generate Text";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // URLTextBox
+            // URLTextBox1
             // 
-            this.URLTextBox.Location = new System.Drawing.Point(36, 60);
-            this.URLTextBox.Name = "URLTextBox";
-            this.URLTextBox.Size = new System.Drawing.Size(117, 20);
-            this.URLTextBox.TabIndex = 1;
+            this.URLTextBox1.Location = new System.Drawing.Point(36, 60);
+            this.URLTextBox1.Name = "URLTextBox1";
+            this.URLTextBox1.Size = new System.Drawing.Size(117, 20);
+            this.URLTextBox1.TabIndex = 1;
             // 
             // richTextBox1
             // 
             this.richTextBox1.Location = new System.Drawing.Point(177, 12);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(750, 394);
+            this.richTextBox1.Size = new System.Drawing.Size(359, 394);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
@@ -88,16 +90,33 @@
             this.pictureBox3.TabIndex = 5;
             this.pictureBox3.TabStop = false;
             // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(557, 12);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(359, 394);
+            this.richTextBox2.TabIndex = 6;
+            this.richTextBox2.Text = "";
+            // 
+            // URLTextBox2
+            // 
+            this.URLTextBox2.Location = new System.Drawing.Point(36, 86);
+            this.URLTextBox2.Name = "URLTextBox2";
+            this.URLTextBox2.Size = new System.Drawing.Size(117, 20);
+            this.URLTextBox2.TabIndex = 7;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(940, 418);
+            this.Controls.Add(this.URLTextBox2);
+            this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.URLTextBox);
+            this.Controls.Add(this.URLTextBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Source Code";
@@ -112,11 +131,13 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox URLTextBox;
+        private System.Windows.Forms.TextBox URLTextBox1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.TextBox URLTextBox2;
     }
 }
 
