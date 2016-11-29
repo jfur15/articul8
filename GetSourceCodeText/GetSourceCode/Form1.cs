@@ -24,11 +24,11 @@ namespace GetSourceCode
             //string url = URLTextBox1.Text;
             //Hard-coded Article 1 in
             URLTextBox1.Text = "Hardcoded for example";
-            string url1 = "http://www.nytimes.com/learning/students/pop/articles/08statement_LN.html";
+            string url1 = "https://web.archive.org/web/20160314164825/http://www.nytimes.com/2016/03/15/us/politics/bernie-sanders-amendments.html?partner=rss&emc=rss";
             //string url2 = URLTextBox2.Text;
             //Hard-coded Article 2 in
             URLTextBox2.Text = "Hardcoded for example";
-            string url2 = "http://www.nytimes.com/learning/teachers/featured_articles/20060609friday.html";
+            string url2 = "http://www.nytimes.com/2016/03/15/us/politics/bernie-sanders-amendments.html";
             var transcoder = new NReadability.NReadabilityWebTranscoder();
             bool success;
             string page1 = transcoder.Transcode(url1, out success);
