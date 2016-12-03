@@ -297,7 +297,6 @@ namespace GetSourceCode
                         }
                     }
                 }
-            int x = 1;
             }
         }
     }
