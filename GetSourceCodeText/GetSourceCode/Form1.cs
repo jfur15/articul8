@@ -91,6 +91,9 @@ namespace GetSourceCode
 
                 richTextBox1.AppendText(title1 + "\n\n\n");
 
+                List<string> Sentences = new List<string>();
+                string temp = "";
+
                 // Format output to left display as individual sentences and paragraphs with line breaks in between.
                 for (int i = 0; i < parts.Length - 1; i++)
                 {
@@ -111,12 +114,15 @@ namespace GetSourceCode
                             {
                                 // Add current word to text box
                                 richTextBox1.AppendText(currentWord + " ");
+                                temp += currentWord + " ";
                             }
                             // If the current word ends in a period...
                             else if (currentWord.Last() == '.')
                             {
                                 // Move down 2 next lines. (New Sentence)
                                 richTextBox1.AppendText(currentWord + " " + "\n\n");
+                                Sentences.Add(temp + currentWord + " ");
+                                temp = "";
                             }
                             else
                             {
@@ -128,6 +134,11 @@ namespace GetSourceCode
                                         // Move down 3 lines. (New Paragraph)
                                         richTextBox1.AppendText(currentWord.Substring(0, indexOfPeriod));
                                         richTextBox1.AppendText("\n\n\n" + (currentWord.Substring(indexOfPeriod + 1)) + " ");
+
+                                        temp += currentWord.Substring(0, indexOfPeriod);
+                                        Sentences.Add(temp);
+                                        temp = currentWord.Substring(indexOfPeriod + 1) + " ";
+                                       
                                     }
                                 }
                                 catch (Exception x)
@@ -148,6 +159,10 @@ namespace GetSourceCode
                                     {
                                         richTextBox1.AppendText(currentWord.Substring(0, j));
                                         richTextBox1.AppendText("\n\n\n" + (currentWord.Substring(j + 1)) + " ");
+                                        
+                                        temp = temp + currentWord.Substring(0, j);
+                                        Sentences.Add(temp);
+                                        temp = currentWord.Substring(j + 1) + " ";
                                     }
                                 }
                             }
@@ -160,6 +175,7 @@ namespace GetSourceCode
                                     {
                                         // Add current word to text box
                                         richTextBox1.AppendText(currentWord + " ");
+                                        temp += currentWord + " ";
                                     }
                                 }
                                 catch (Exception x)
@@ -173,12 +189,16 @@ namespace GetSourceCode
                     {
                         // Add current word to text box
                         richTextBox1.AppendText(currentWord + " ");
+                        temp += currentWord + " ";
                     }
                 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Parse Article 1 Into TextBox1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-
+                
                 richTextBox2.AppendText(title2 + "\n\n\n");
+
+                List<string> Sentences2 = new List<string>();
+                string temp2 = "";
 
                     // Format output to left display as individual sentences and paragraphs with line breaks in between.
                     for (int i = 0; i < parts2.Length - 1; i++)
@@ -200,12 +220,15 @@ namespace GetSourceCode
                                 {
                                     // Add current word to text box
                                     richTextBox2.AppendText(currentWord + " ");
+                                    temp2 += currentWord + " ";
                                 }
                                 // If the current word ends in a period...
                                 else if (currentWord.Last() == '.')
                                 {
                                     // Move down 2 next lines. (New Sentence)
                                     richTextBox2.AppendText(currentWord + " " + "\n\n");
+                                    Sentences2.Add(temp2 + currentWord + " ");
+                                    temp2 = "";
                                 }
                                 else
                                 {
@@ -217,6 +240,10 @@ namespace GetSourceCode
                                             // Move down 3 lines. (New Paragraph)
                                             richTextBox2.AppendText(currentWord.Substring(0, indexOfPeriod));
                                             richTextBox2.AppendText("\n\n\n" + (currentWord.Substring(indexOfPeriod + 1)) + " ");
+                                            
+                                            temp2 += currentWord.Substring(0, indexOfPeriod);
+                                            Sentences2.Add(temp2);
+                                            temp2 = currentWord.Substring(indexOfPeriod + 1) + " ";
                                         }
                                     }
                                     catch (Exception x)
@@ -237,6 +264,9 @@ namespace GetSourceCode
                                         {
                                             richTextBox2.AppendText(currentWord.Substring(0, j));
                                             richTextBox2.AppendText("\n\n\n" + (currentWord.Substring(j + 1)) + " ");
+                                            temp2 = temp + currentWord.Substring(0, j);
+                                            Sentences2.Add(temp2);
+                                            temp2 = currentWord.Substring(j + 1) + " ";
                                         }
                                     }
                                 }
@@ -249,6 +279,7 @@ namespace GetSourceCode
                                         {
                                             // Add current word to text box
                                             richTextBox2.AppendText(currentWord + " ");
+                                            temp2 += currentWord + " ";
                                         }
                                     }
                                     catch (Exception x)
@@ -262,9 +293,11 @@ namespace GetSourceCode
                         {
                             // Add current word to text box
                             richTextBox2.AppendText(currentWord + " ");
+                            temp2 += currentWord + " ";
                         }
                     }
                 }
+            int x = 1;
             }
         }
     }
