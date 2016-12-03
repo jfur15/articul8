@@ -54,6 +54,14 @@ namespace GetSourceCode
 
             if (success)
             {
+                string nextWord;
+                string currentWord;
+                string cutWord;
+                int indexOfPeriod;
+                int nextWordNum;
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
                 HtmlAgilityPack.HtmlDocument doc1 = new HtmlAgilityPack.HtmlDocument();
                 doc1.LoadHtml(page1);
 
@@ -64,45 +72,197 @@ namespace GetSourceCode
 
 
                 // Use space as delimiter to split string into individual words.
-                char[] delimiters = new char[] { ' ' };
+                char[] delimiters = new char[] { ' ', ',' };
 
 
                 // Split main body of text from article 1 into an array of strings.
                 string[] parts = mainText1.Split(delimiters);
 
+                richTextBox1.AppendText(title1 + "\n\n\n");
 
-                // Format output to left display as individual sentences with line breaks in between.
-                foreach (string word in parts)
+                // Format output to left display as individual sentences and paragraphs with line breaks in between.
+                for (int i = 0; i < parts.Length - 1; i++)
                 {
-                    richTextBox1.AppendText(title1 + "\n\n\n");
-                    richTextBox1.AppendText(word + " ");
-                    if ((word.Contains('.')) && (word != "Mr."))
+                    currentWord = parts[i];
+                    nextWord = parts[i + 1];
+                    indexOfPeriod = (currentWord.IndexOf('.'));
+
+                    cutWord = currentWord.Substring(1);
+
+                    // If current word contains a period
+                    if (currentWord.Contains('.'))
                     {
-                        if(word.Last() == '.') { richTextBox1.AppendText("\n\n"); }
+                        // If current word contains one period...
+                        if (((currentWord.Count(x => x == '.')) == 1))
+                        {
+                            // If the current word is a title or contains a number immediately after period...
+                            if ((currentWord == "Mr.") || (int.TryParse(nextWord, out nextWordNum)) || (char.IsLower(nextWord, 0)))
+                            {
+                                // Add current word to text box
+                                richTextBox1.AppendText(currentWord + " ");
+                            }
+                            // If the current word ends in a period...
+                            else if (currentWord.Last() == '.')
+                            {
+                                // Move down 2 next lines. (New Sentence)
+                                richTextBox1.AppendText(currentWord + " " + "\n\n");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    // If letter after period is uppercase or punctuation
+                                    if (char.IsUpper(currentWord, (indexOfPeriod + 1)) || char.IsPunctuation(currentWord, (indexOfPeriod + 1)))
+                                    {
+                                        // Move down 3 lines. (New Paragraph)
+                                        richTextBox1.AppendText(currentWord.Substring(0, indexOfPeriod));
+                                        richTextBox1.AppendText("\n\n\n" + (currentWord.Substring(indexOfPeriod + 1)) + " ");
+                                    }
+                                }
+                                catch (Exception x)
+                                {
+                                    MessageBox.Show("Error: One Period");
+                                }
+                            }
+                        }
+                        // If current word contains more than one period...
+                        else if (((currentWord.Count(x => x == '.')) > 1))
+                        {
+                            // If current word has multiple periods, one at the end...
+                            if (currentWord.Last() == '.')
+                            {
+                                for (int j = 0; j < currentWord.Length - 1; j++)
+                                {
+                                    if (currentWord[j] == '.')
+                                    {
+                                        richTextBox1.AppendText(currentWord.Substring(0, j));
+                                        richTextBox1.AppendText("\n\n\n" + (currentWord.Substring(j + 1)) + " ");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    // If the current word is a title or contains a number immediately after period...
+                                    if ((currentWord == "Mr.") || (int.TryParse((parts[indexOfPeriod + 1]), out nextWordNum)))
+                                    {
+                                        // Add current word to text box
+                                        richTextBox1.AppendText(currentWord + " ");
+                                    }
+                                }
+                                catch (Exception x)
+                                {
+                                    MessageBox.Show("Error: Multiple Periods");
+                                }
+                            }
+                        }
                     }
-                }
-
-                HtmlAgilityPack.HtmlDocument doc2 = new HtmlAgilityPack.HtmlDocument();
-                doc2.LoadHtml(page2);
-
-                // Extract data from second article.
-                string title2 = doc2.DocumentNode.SelectSingleNode("//title").InnerText;
-                string mainText2 = doc2.DocumentNode.SelectSingleNode("//div[@id='readInner']").InnerText;
-                //var imgUrl = doc.DocumentNode.SelectSingleNode("//meta[@property='og:image']").Attributes["content"].Value;
-                
-
-                // Split main body of text from article 2 into an array of strings.
-                string[] parts2 = mainText2.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-
-                // Format output to right display as individual sentences with line breaks in between.
-                foreach (string word in parts2)
-                {
-                    richTextBox2.AppendText(title2 + "\n\n\n");
-                    richTextBox2.AppendText(word + " ");
-                    if ((word.Contains('.')) && (word != "Mr."))
+                    else
                     {
-                        if (word.Last() == '.') { richTextBox2.AppendText("\n\n"); }
+                        // Add current word to text box
+                        richTextBox1.AppendText(currentWord + " ");
+                    }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+                    HtmlAgilityPack.HtmlDocument doc2 = new HtmlAgilityPack.HtmlDocument();
+                    doc2.LoadHtml(page2);
+
+                    // Extract data from second article.
+                    string title2 = doc2.DocumentNode.SelectSingleNode("//title").InnerText;
+                    string mainText2 = doc2.DocumentNode.SelectSingleNode("//div[@id='readInner']").InnerText;
+                    //var imgUrl = doc.DocumentNode.SelectSingleNode("//meta[@property='og:image']").Attributes["content"].Value;
+
+
+                    // Split main body of text from article 2 into an array of strings.
+                    string[] parts2 = mainText2.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+                    richTextBox2.AppendText(title2 + "\n\n\n");
+
+                    // Format output to left display as individual sentences and paragraphs with line breaks in between.
+                    for (i = 0; i < parts2.Length - 1; i++)
+                    {
+                        currentWord = parts2[i];
+                        nextWord = parts2[i + 1];
+                        indexOfPeriod = (currentWord.IndexOf('.'));
+
+                        cutWord = currentWord.Substring(1);
+
+                        // If current word contains a period
+                        if (currentWord.Contains('.'))
+                        {
+                            // If current word contains one period...
+                            if (((currentWord.Count(x => x == '.')) == 1))
+                            {
+                                // If the current word is a title or contains a number immediately after period...
+                                if ((currentWord == "Mr.") || (int.TryParse(nextWord, out nextWordNum)) || (char.IsLower(nextWord, 0)))
+                                {
+                                    // Add current word to text box
+                                    richTextBox2.AppendText(currentWord + " ");
+                                }
+                                // If the current word ends in a period...
+                                else if (currentWord.Last() == '.')
+                                {
+                                    // Move down 2 next lines. (New Sentence)
+                                    richTextBox2.AppendText(currentWord + " " + "\n\n");
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        // If letter after period is uppercase or punctuation
+                                        if (char.IsUpper(currentWord, (indexOfPeriod + 1)) || char.IsPunctuation(currentWord, (indexOfPeriod + 1)))
+                                        {
+                                            // Move down 3 lines. (New Paragraph)
+                                            richTextBox2.AppendText(currentWord.Substring(0, indexOfPeriod));
+                                            richTextBox2.AppendText("\n\n\n" + (currentWord.Substring(indexOfPeriod + 1)) + " ");
+                                        }
+                                    }
+                                    catch (Exception x)
+                                    {
+                                        MessageBox.Show("Error: One Period");
+                                    }
+                                }
+                            }
+                            // If current word contains more than one period...
+                            else if (((currentWord.Count(x => x == '.')) > 1))
+                            {
+                                // If current word has multiple periods, one at the end...
+                                if (currentWord.Last() == '.')
+                                {
+                                    for (int j = 0; j < currentWord.Length - 1; j++)
+                                    {
+                                        if (currentWord[j] == '.')
+                                        {
+                                            richTextBox2.AppendText(currentWord.Substring(0, j));
+                                            richTextBox2.AppendText("\n\n\n" + (currentWord.Substring(j + 1)) + " ");
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        // If the current word is a title or contains a number immediately after period...
+                                        if ((currentWord == "Mr.") || (int.TryParse((parts2[indexOfPeriod + 1]), out nextWordNum)))
+                                        {
+                                            // Add current word to text box
+                                            richTextBox2.AppendText(currentWord + " ");
+                                        }
+                                    }
+                                    catch (Exception x)
+                                    {
+                                        MessageBox.Show("Error: Multiple Periods");
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Add current word to text box
+                            richTextBox2.AppendText(currentWord + " ");
+                        }
                     }
                 }
             }
