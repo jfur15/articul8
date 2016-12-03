@@ -60,7 +60,10 @@ namespace GetSourceCode
                 int indexOfPeriod;
                 int nextWordNum;
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+                // Use space as delimiter to split string into individual words.
+                char[] delimiters = new char[] { ' ', ',' };
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Split Article 1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
                 HtmlAgilityPack.HtmlDocument doc1 = new HtmlAgilityPack.HtmlDocument();
                 doc1.LoadHtml(page1);
@@ -68,15 +71,23 @@ namespace GetSourceCode
                 // Extract data from first article.
                 string title1 = doc1.DocumentNode.SelectSingleNode("//title").InnerText;
                 string mainText1 = doc1.DocumentNode.SelectSingleNode("//div[@id='readInner']").InnerText;
-                //var imgUrl = doc.DocumentNode.SelectSingleNode("//meta[@property='og:image']").Attributes["content"].Value;
-
-
-                // Use space as delimiter to split string into individual words.
-                char[] delimiters = new char[] { ' ', ',' };
-
 
                 // Split main body of text from article 1 into an array of strings.
-                string[] parts = mainText1.Split(delimiters);
+                string[] parts = mainText1.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Split Article 2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+                HtmlAgilityPack.HtmlDocument doc2 = new HtmlAgilityPack.HtmlDocument();
+                doc2.LoadHtml(page2);
+
+                // Extract data from second article.
+                string title2 = doc2.DocumentNode.SelectSingleNode("//title").InnerText;
+                string mainText2 = doc2.DocumentNode.SelectSingleNode("//div[@id='readInner']").InnerText;
+
+                // Split main body of text from article 2 into an array of strings.
+                string[] parts2 = mainText2.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Parse Article 1 Into TextBox1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
                 richTextBox1.AppendText(title1 + "\n\n\n");
 
@@ -163,25 +174,14 @@ namespace GetSourceCode
                         // Add current word to text box
                         richTextBox1.AppendText(currentWord + " ");
                     }
+                }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Parse Article 1 Into TextBox1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-                    HtmlAgilityPack.HtmlDocument doc2 = new HtmlAgilityPack.HtmlDocument();
-                    doc2.LoadHtml(page2);
-
-                    // Extract data from second article.
-                    string title2 = doc2.DocumentNode.SelectSingleNode("//title").InnerText;
-                    string mainText2 = doc2.DocumentNode.SelectSingleNode("//div[@id='readInner']").InnerText;
-                    //var imgUrl = doc.DocumentNode.SelectSingleNode("//meta[@property='og:image']").Attributes["content"].Value;
-
-
-                    // Split main body of text from article 2 into an array of strings.
-                    string[] parts2 = mainText2.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-                    richTextBox2.AppendText(title2 + "\n\n\n");
+                richTextBox2.AppendText(title2 + "\n\n\n");
 
                     // Format output to left display as individual sentences and paragraphs with line breaks in between.
-                    for (i = 0; i < parts2.Length - 1; i++)
+                    for (int i = 0; i < parts2.Length - 1; i++)
                     {
                         currentWord = parts2[i];
                         nextWord = parts2[i + 1];
@@ -268,4 +268,3 @@ namespace GetSourceCode
             }
         }
     }
-}
