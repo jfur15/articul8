@@ -296,6 +296,27 @@ namespace GetSourceCode
                             temp2 += currentWord + " ";
                         }
                     }
+                //Compare here
+                List<string> SentencesFinal = new List<string>();
+
+                for (int i = 0; i < Sentences.Count; i++)
+                {
+
+                    for (int j = 0; j < Sentences2.Count; j++)
+                    {
+                        if(Sentences[i] == Sentences2[j])
+                        {
+                            SentencesFinal.Add(Sentences[i]);
+                        }
+                    }
+                }
+
+                foreach(string s in SentencesFinal)
+                {
+                    //Append to final text box
+                    richTextBox3.AppendText(s + "\n\n");
+                }
+
                 }
             }
         }
