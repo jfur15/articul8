@@ -28,6 +28,8 @@ namespace HAPtest
         private void URLGet(TextBox tb, RichTextBox rtb)
         {
             HtmlWeb webPage = new HtmlWeb();
+            webPage.UseCookies = true;
+            //Try webPage.load(tb.text)
             HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load(tb.Text);
             //HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load("https://web.archive.org/web/20160314164825/http://www.nytimes.com/2016/03/15/us/politics/bernie-sanders-amendments.html?partner=rss&emc=rss");
             List<HtmlNode> myNodes = new List<HtmlNode>();
@@ -42,16 +44,23 @@ namespace HAPtest
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            GetText g = new GetText();
-            Dictionary<TextBox, RichTextBox> inputs = new Dictionary<TextBox, RichTextBox>();
-            inputs.Add(textBox1, richTextBox1);
-            inputs.Add(textBox2, richTextBox2);
+            List<TextBox> TextBoxList = new List<TextBox>();
+            TextBoxList.Add(textBox1);
+            TextBoxList.Add(textBox2);
 
-            foreach (TextBox t in inputs.Keys)
+            //Check for 2 boxes of input
+            foreach (var tb in TextBoxList)
             {
-                URLGet(t, inputs[t]);
+                if (string.IsNullOrEmpty(tb.Text) || string.IsNullOrWhiteSpace(tb.Text))
+                {
+                    MessageBox.Show("Invalid Input: Please enter into all required fields");
+                }
+
             }
-            
+
+
+            URLGet(textBox1, richTextBox1);
+            URLGet(textBox2, richTextBox2);
 
             //g.URLSplit(textBox1.Text, richTextBox1);
         }
