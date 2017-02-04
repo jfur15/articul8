@@ -31,12 +31,27 @@ namespace HAPtest
             List<List<string>> allArticles = new List<List<string>>();
             List<string> TextBoxUrlList = new List<string>();
 
+            for (int i = tabControl1.TabPages.Count; i > 1; i--)
+            {
+                tabControl1.TabPages.Remove(tabControl1.TabPages[i-1]);
+            }
+
             foreach (TextBox T in Articles.Controls)
             {
+                T.BackColor = Color.White;
                 if (!string.IsNullOrEmpty(T.Text))
                 {
-                    TextBoxUrlList.Add(T.Text);
-                    AddArticle(allArticles);
+                   
+                    if (Uri.IsWellFormedUriString(T.Text, UriKind.Absolute))
+                    {
+                        TextBoxUrlList.Add(T.Text);
+                        AddArticle(allArticles);
+                    }
+                    else
+                    {
+                        T.BackColor = Color.LightPink;
+                        MessageBox.Show("Invalid Input: " + T.Text + " is not a valid URL");
+                    }
                 }
             }
             if (TextBoxUrlList.Count() < 2)
@@ -49,7 +64,24 @@ namespace HAPtest
                 URLGet(TextBoxUrlList[i], allArticles[i]);
             }
 
-            richTextBox1.AppendText("Hello!");
+            int idx = 1;
+            foreach (List<string> lis in allArticles)
+            {
+                TabPage tempTab = new TabPage();
+                RichTextBox tempRtb = new RichTextBox();
+                
+                foreach (string p in lis)
+                {
+                    richTextBox1.AppendText(p + "\n\n\n");
+                    tempRtb.AppendText(p + "\n\n\n");
+                }
+                tempTab.Text = "Article " + idx;
+                tempTab.Controls.Add(tempRtb);
+                tempRtb.Dock = DockStyle.Fill;
+                tabControl1.TabPages.Add(tempTab);
+                idx++;
+            }
+        
         }
 
         private void AddArticle(List<List<string>> listString)
