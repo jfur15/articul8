@@ -28,8 +28,7 @@ namespace HAPtest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<List<string>> allArticles = new List<List<string>>();
-            List<string> TextBoxUrlList = new List<string>();
+            List<Article> allArticles = new List<Article>();
 
             for (int i = tabControl1.TabPages.Count; i > 1; i--)
             {
@@ -44,8 +43,8 @@ namespace HAPtest
                    
                     if (Uri.IsWellFormedUriString(T.Text, UriKind.Absolute))
                     {
-                        TextBoxUrlList.Add(T.Text);
-                        AddArticle(allArticles);
+                        Article newArticle = new Article(T.Text);
+                        allArticles.Add(newArticle);
                     }
                     else
                     {
@@ -54,26 +53,43 @@ namespace HAPtest
                     }
                 }
             }
-            if (TextBoxUrlList.Count() < 2)
+            if (allArticles.Count() < 2)
             {
                 MessageBox.Show("Invalid Input: Please enter URL into at least 2 fields");
             }
 
-            for (int i = 0; i < TextBoxUrlList.Count; i++)
+            for (int i = 0; i < allArticles.Count; i++)
             {
-                URLGet(TextBoxUrlList[i], allArticles[i]);
+                URLGet(allArticles[i]);
             }
 
-            int idx = 1;
-            foreach (List<string> lis in allArticles)
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+            ////code for splitting up paragraphs into sentences
+            //foreach (Article L in allArticles)
+            //{
+
+            //    List<List<string[]>> allArticlesSentences = new List<List<string[]>>();
+            //    allArticlesSentences.Add(splitPargraphs(L));
+
+            //    List<List<List<string>>> AllArticlesSentencesWords = new List<List<List<string>>>();
+            //}
+               
+
+
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                int idx = 1;
+            foreach (Article A in allArticles)
             {
                 TabPage tempTab = new TabPage();
                 RichTextBox tempRtb = new RichTextBox();
                 
-                foreach (string p in lis)
+                foreach (Paragraph p in A.paragraphs)
                 {
-                    richTextBox1.AppendText(p + "\n\n\n");
-                    tempRtb.AppendText(p + "\n\n\n");
+                    richTextBox1.AppendText(p.Text + "\n\n\n");
+                    tempRtb.AppendText(p.Text + "\n\n\n");
                 }
                 tempTab.Text = "Article " + idx;
                 tempTab.Controls.Add(tempRtb);
@@ -84,25 +100,63 @@ namespace HAPtest
         
         }
 
-        private void AddArticle(List<List<string>> listString)
-        {
-            List<string> UrlContent = new List<string>();
-            listString.Add(UrlContent);
-        }
 
-        private void URLGet(string tb, List<string> stringList)
+        //public void AddArticle(List<List<string>> listString)
+        //{
+        //    Paragraphs ArticleContent = new Paragraphs();
+        //    listString.Add(UrlContent);
+        //}
+
+        private void URLGet(Article anArticle)
         {
             HtmlWeb webPage = new HtmlWeb();
             webPage.UseCookies = true;
             //Try webPage.load(tb.text)
-            HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load(tb);
+            HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load(anArticle.URL);
             //HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load("https://web.archive.org/web/20160314164825/http://www.nytimes.com/2016/03/15/us/politics/bernie-sanders-amendments.html?partner=rss&emc=rss");
             List<HtmlNode> myNodes = new List<HtmlNode>();
             foreach (HtmlNode node in getHtmlWeb.DocumentNode.SelectNodes("//p"))
             {
-                stringList.Add(System.Net.WebUtility.HtmlDecode(node.InnerText));
+                anArticle.AddParagraph(System.Net.WebUtility.HtmlDecode(node.InnerText));
             }
         }
+  
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // Split list of paragraphs into list of sentences
+        private List<string[]> splitPargraphs(List<string> listParagraphs)
+        {
+            List<string[]> listSentences = new List<string[]>();
+
+            // Use space as delimiter to split string into individual words.
+            char[] delimiters = new char[] { '.' };
+
+            // Split list of paragraphs into list of sentences
+            foreach (string paragraph in listParagraphs)
+            {
+                // Create sentences based on periods
+                listSentences.Add(paragraph.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            //listString.Add(UrlContent);
+
+            return listSentences;
+        }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        //// Split list of sentences into list of words
+        //private List<string> splitSentences(List<string> listSentences)
+        //{
+        //    List<string> listWords = new List<string>();
+        //    listString.Add(UrlContent);
+
+
+        //    return listWords;
+        //}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     }
 }
 
