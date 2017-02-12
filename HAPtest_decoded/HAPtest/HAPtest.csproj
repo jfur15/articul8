@@ -61,8 +61,7 @@
     <Compile Include="Input\Paragraph.cs" />
     <Compile Include="Input\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Input\Words.cs" />
-    <Compile Include="Input\Sentences.cs" />
+    <Compile Include="Input\Sentence.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

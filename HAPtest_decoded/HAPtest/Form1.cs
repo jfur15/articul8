@@ -18,31 +18,32 @@ namespace HAPtest
         public Form1()
         {
             InitializeComponent();
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
+        // Primary function: click button to process input
         private void button1_Click(object sender, EventArgs e)
         {
+            // Create a list to house all articles inputted
             List<Article> allArticles = new List<Article>();
 
-            for (int i = tabControl1.TabPages.Count; i > 1; i--)
-            {
-                tabControl1.TabPages.Remove(tabControl1.TabPages[i-1]);
-            }
+            // Remove tabs from any previous button clicks
+            for (int i = tabControl1.TabPages.Count; i > 1; i--) { tabControl1.TabPages.Remove(tabControl1.TabPages[i-1]); }
 
+            //  Extract URLs from TextBoxes, error check, and create article for each
             foreach (TextBox T in Articles.Controls)
             {
                 T.BackColor = Color.White;
+                // Is anything in the textbox?
                 if (!string.IsNullOrEmpty(T.Text))
                 {
-                   
+                    // Is it actually a URL?
                     if (Uri.IsWellFormedUriString(T.Text, UriKind.Absolute))
                     {
+                        // Create new article object and add it to list of all articles
                         Article newArticle = new Article(T.Text);
                         allArticles.Add(newArticle);
                     }
@@ -53,34 +54,17 @@ namespace HAPtest
                     }
                 }
             }
-            if (allArticles.Count() < 2)
-            {
-                MessageBox.Show("Invalid Input: Please enter URL into at least 2 fields");
-            }
-
-            for (int i = 0; i < allArticles.Count; i++)
-            {
-                URLGet(allArticles[i]);
-            }
-
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // Error Checking: User must enter two URLs miniumum
+            if (allArticles.Count() < 2) { MessageBox.Show("Invalid Input: Please enter URL into at least 2 fields"); }
 
 
-            ////code for splitting up paragraphs into sentences
-            //foreach (Article L in allArticles)
-            //{
-
-            //    List<List<string[]>> allArticlesSentences = new List<List<string[]>>();
-            //    allArticlesSentences.Add(splitPargraphs(L));
-
-            //    List<List<List<string>>> AllArticlesSentencesWords = new List<List<List<string>>>();
-            //}
-               
+            // Use URLGet function to retrieve URLs from textbox input and proceed to extract website text and assign it to
+            // each Article object in primary list in paragraph form
+            for (int i = 0; i < allArticles.Count; i++) { URLGet(allArticles[i]); }
 
 
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                int idx = 1;
+            // Format output to GUI. Create/Label a tab for each article and output text in paragraph form to RichTextBox in each.
+            int idx = 1;
             foreach (Article A in allArticles)
             {
                 TabPage tempTab = new TabPage();
@@ -97,53 +81,35 @@ namespace HAPtest
                 tabControl1.TabPages.Add(tempTab);
                 idx++;
             }
-        
         }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-        //public void AddArticle(List<List<string>> listString)
-        //{
-        //    Paragraphs ArticleContent = new Paragraphs();
-        //    listString.Add(UrlContent);
-        //}
-
+        // Retrieve text from webpage in paragraph form based on URL and assign to passed in Article object
         private void URLGet(Article anArticle)
         {
+            // Create HTMLWeb object, enable cookies, and use Article object's URL string to load online webpage
+            // into HTMLDocument object
             HtmlWeb webPage = new HtmlWeb();
             webPage.UseCookies = true;
-            //Try webPage.load(tb.text)
             HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load(anArticle.URL);
-            //HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load("https://web.archive.org/web/20160314164825/http://www.nytimes.com/2016/03/15/us/politics/bernie-sanders-amendments.html?partner=rss&emc=rss");
-            List<HtmlNode> myNodes = new List<HtmlNode>();
+
+            // This line doesn't seem to do anything...
+            //List<HtmlNode> myNodes = new List<HtmlNode>();
+
+            // For each node in loaded webpage that is in paragraph tags (<p> </p>) add contained text to Article 
+            // object's list of paragraphs
             foreach (HtmlNode node in getHtmlWeb.DocumentNode.SelectNodes("//p"))
             {
                 anArticle.AddParagraph(System.Net.WebUtility.HtmlDecode(node.InnerText));
             }
         }
-  
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // Split list of paragraphs into list of sentences
-        private List<string[]> splitPargraphs(List<string> listParagraphs)
-        {
-            List<string[]> listSentences = new List<string[]>();
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-            // Use space as delimiter to split string into individual words.
-            char[] delimiters = new char[] { '.' };
 
-            // Split list of paragraphs into list of sentences
-            foreach (string paragraph in listParagraphs)
-            {
-                // Create sentences based on periods
-                listSentences.Add(paragraph.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
-            }
 
-            //listString.Add(UrlContent);
-
-            return listSentences;
-        }
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
         //// Split list of sentences into list of words
         //private List<string> splitSentences(List<string> listSentences)
@@ -155,7 +121,7 @@ namespace HAPtest
         //    return listWords;
         //}
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
     }
 }
