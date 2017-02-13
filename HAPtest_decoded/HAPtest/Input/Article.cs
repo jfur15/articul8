@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +21,11 @@ namespace HAPtest
 
         public void AddParagraph(string input)
         {
-            Paragraph newParagraph = new Paragraph(input);
-            paragraphs.Add(newParagraph);
+            if (input.Length >= 10 && input.Contains(" "))
+            { 
+                paragraphs.Add(new Paragraph(input.Trim()));
+            }
+            
         }
-
     }
 }

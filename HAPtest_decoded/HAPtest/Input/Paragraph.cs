@@ -28,7 +28,7 @@ namespace HAPtest
             // Convert array of strings into a list of Sentence objects
             for (int i = 0; i < arraySentences.Length; i++)
             {
-                Sentence newSentence = new Sentence(arraySentences[i]);
+                Sentence newSentence = new Sentence(arraySentences[i].Trim());
                 sentences.Add(newSentence);
             }
         }

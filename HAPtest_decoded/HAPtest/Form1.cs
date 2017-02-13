@@ -64,6 +64,7 @@ namespace HAPtest
 
 
             // Format output to GUI. Create/Label a tab for each article and output text in paragraph form to RichTextBox in each.
+            // Also sentence tabs with ordered scores and shit
             int idx = 1;
             foreach (Article A in allArticles)
             {
@@ -75,9 +76,33 @@ namespace HAPtest
                     richTextBox1.AppendText(p.Text + "\n\n\n");
                     tempRtb.AppendText(p.Text + "\n\n\n");
                 }
-                tempTab.Text = "Article " + idx;
+                tempTab.Text = "Article " + idx + ": Paragraphs";
                 tempTab.Controls.Add(tempRtb);
                 tempRtb.Dock = DockStyle.Fill;
+                tabControl1.TabPages.Add(tempTab);
+
+                tempTab = new TabPage();
+                ListView tempView = new ListView();
+                tempView.View = View.Details;
+                tempView.GridLines = true;
+                tempView.Columns.Add(new ColumnHeader().Name = "Text");
+
+                tempView.Columns.Add(new ColumnHeader().Name = "Score");
+                foreach (Paragraph p in A.paragraphs)
+                {
+                    foreach (Sentence s in p.sentences)
+                    {
+                        richTextBox1.AppendText(s.Text + "\n\n\n");
+                        tempView.Items.Add(new ListViewItem(new string[] {s.Grade.ToString(), s.Text }));
+                        //tempRtb.AppendText(s.Text + "|" + s.Grade + "\n\n\n");
+
+                    }
+                   
+                }
+                tempView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                tempView.Text = "Article " + idx + ": Sentences";
+                tempTab.Controls.Add(tempView);
+                tempView.Dock = DockStyle.Fill;
                 tabControl1.TabPages.Add(tempTab);
                 idx++;
             }
@@ -93,10 +118,7 @@ namespace HAPtest
             HtmlWeb webPage = new HtmlWeb();
             webPage.UseCookies = true;
             HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load(anArticle.URL);
-
-            // This line doesn't seem to do anything...
-            //List<HtmlNode> myNodes = new List<HtmlNode>();
-
+            
             // For each node in loaded webpage that is in paragraph tags (<p> </p>) add contained text to Article 
             // object's list of paragraphs
             foreach (HtmlNode node in getHtmlWeb.DocumentNode.SelectNodes("//p"))
@@ -104,25 +126,6 @@ namespace HAPtest
                 anArticle.AddParagraph(System.Net.WebUtility.HtmlDecode(node.InnerText));
             }
         }
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-
-        //// Split list of sentences into list of words
-        //private List<string> splitSentences(List<string> listSentences)
-        //{
-        //    List<string> listWords = new List<string>();
-        //    listString.Add(UrlContent);
-
-
-        //    return listWords;
-        //}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-
     }
 }
 
