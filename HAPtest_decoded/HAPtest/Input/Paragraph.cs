@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Text.RegularExpressions;
 namespace HAPtest
 {
     class Paragraph
@@ -19,18 +19,42 @@ namespace HAPtest
 
             sentences = new List<Sentence>();
 
-            // Use period as delimiter to split string into individual sentences.
-            char[] delimiters = new char[] { '.' };
 
             // Split paragraph into array of strings
-            string[] arraySentences = aParagraph.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-            // Convert array of strings into a list of Sentence objects
-            for (int i = 0; i < arraySentences.Length; i++)
+            List<string> arraySentences = new List<string>();
+            string tempString = "";
+            int wordLen = 0; //wordLen represents how long a word has to be before we can split a sentence.
+
+            char[] sentenceEnders = { '.', '?', '!' };
+
+            //Iterate through every single character of aParagraph
+            for (int i = 0; i < aParagraph.Length; i++)
             {
-                Sentence newSentence = new Sentence(arraySentences[i].Trim());
-                sentences.Add(newSentence);
+                //Add each character to a temporary string and wordLen
+                tempString = tempString + aParagraph[i];
+                wordLen++;
+
+                //If a space appears, we need to reset wordLen.
+                if (char.IsWhiteSpace(aParagraph[i]))
+                {
+                    wordLen = 0;
+                }
+
+                //If there are at least 4 characters before a sentence ender, we split the paragraph
+                if (sentenceEnders.Contains(aParagraph[i]) && wordLen >= 4)
+                {
+                    arraySentences.Add(tempString);//Add to the main list of sentences
+                    tempString = "";        //Reset the temporary string
+                    wordLen = 0;            //reset the word length
+                }
+            }
+
+            foreach (string s in arraySentences)
+            {
+                sentences.Add( new Sentence(s.Trim()));
             }
         }
+
     }
 }

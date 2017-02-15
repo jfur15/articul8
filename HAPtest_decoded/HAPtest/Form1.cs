@@ -82,12 +82,29 @@ namespace HAPtest
                 tabControl1.TabPages.Add(tempTab);
 
                 tempTab = new TabPage();
+                tempRtb = new RichTextBox();
+
+                foreach (Paragraph p in A.paragraphs)
+                {
+                    foreach (Sentence s in p.sentences)
+                    {
+                        richTextBox1.AppendText(s.Text + "\n\n\n");
+                        tempRtb.AppendText(s.Text + "\n\n\n");
+                    }
+                    
+                }
+                tempTab.Text = "Article " + idx + ": Sentences";
+                tempTab.Controls.Add(tempRtb);
+                tempRtb.Dock = DockStyle.Fill;
+                tabControl1.TabPages.Add(tempTab);
+
+                tempTab = new TabPage();
                 ListView tempView = new ListView();
                 tempView.View = View.Details;
                 tempView.GridLines = true;
-                tempView.Columns.Add(new ColumnHeader().Name = "Text");
-
                 tempView.Columns.Add(new ColumnHeader().Name = "Score");
+
+                tempView.Columns.Add(new ColumnHeader().Name = "Text");
                 foreach (Paragraph p in A.paragraphs)
                 {
                     foreach (Sentence s in p.sentences)
@@ -103,7 +120,7 @@ namespace HAPtest
                 tempView.Text = "Article " + idx + ": Sentences";
                 tempTab.Controls.Add(tempView);
                 tempView.Dock = DockStyle.Fill;
-                tabControl1.TabPages.Add(tempTab);
+                tabControl1.TabPages.Add(tempTab);                
                 idx++;
             }
         }
@@ -118,10 +135,10 @@ namespace HAPtest
             HtmlWeb webPage = new HtmlWeb();
             webPage.UseCookies = true;
             HtmlAgilityPack.HtmlDocument getHtmlWeb = webPage.Load(anArticle.URL);
-            
+
             // For each node in loaded webpage that is in paragraph tags (<p> </p>) add contained text to Article 
             // object's list of paragraphs
-            foreach (HtmlNode node in getHtmlWeb.DocumentNode.SelectNodes("//p"))
+            foreach (HtmlNode node in getHtmlWeb.DocumentNode.SelectNodes("//p | div[contains (@class, body)]"))
             {
                 anArticle.AddParagraph(System.Net.WebUtility.HtmlDecode(node.InnerText));
             }

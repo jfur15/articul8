@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Text.RegularExpressions;
 namespace HAPtest
 {
     class Sentence
     {
-        List<string> words;
+        public List<string> words;
         string text;
         int grade = 0;
 
@@ -30,7 +30,7 @@ namespace HAPtest
             // Convert array of words into a list
             for (int i = 0; i < arrayWords.Length; i++)
             {
-                words.Add(arrayWords[i]);
+                words.Add(arrayWords[i].Trim());
             }
 
             gradeSentence();
@@ -39,11 +39,18 @@ namespace HAPtest
         // Set grade variable to determine priority of string
         private void gradeSentence()
         {
-            if (text.All(char.IsDigit))
+            
+            foreach (string word in words)
             {
-                grade += 4;
+                if (word.Any(char.IsDigit))
+                {
+                    grade += 1;
+                }
+                
             }
-            if (text.Contains('"'))
+            string g = System.Net.WebUtility.HtmlDecode("&quot;");
+
+            if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
             {
                 grade += 3;
             }
@@ -51,6 +58,27 @@ namespace HAPtest
             {
                 grade -= 5;
             }
+            for (int i = 1; i < words.Count; i++)
+            {
+                if(char.IsUpper(words[i][0]))
+                {
+                    grade += 1;
+                    break;
+                }
+
+            }
+
+
+            if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
+            {
+                grade += 3;
+            }
+            if (text.Contains(')'))
+            {
+                grade -= 5;
+            }
+
+
         }
     }
 }
