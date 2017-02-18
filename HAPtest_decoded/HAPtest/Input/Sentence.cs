@@ -11,6 +11,9 @@ namespace HAPtest
         public List<string> words;
         string text;
         int grade = 0;
+        List<string> wLeaders = new List<string>() {"Trump", "Netanyahu", "Trudeau",
+                "May", "Putin", "Al-Assad", "Merkel", "Jong-Un", "Castro", "Sanders",
+                "Khamenei", "Abe", "Jin-Ping", "Francis", "Gentiloni" };
 
         public string Text { get { return text; } set { text = value; } }
         public int Grade { get { return grade; } }
@@ -39,15 +42,23 @@ namespace HAPtest
         // Set grade variable to determine priority of string
         private void gradeSentence()
         {
-            
             foreach (string word in words)
             {
                 if (word.Any(char.IsDigit))
                 {
-                    grade += 1;
+                    DateTime temp = new DateTime();
+                    //improve...
+                    if (DateTime.TryParse(word, out temp))
+                    {
+                        if (DateTime.Parse(word).Year > 1800 && DateTime.Parse(word).Year < 2050)
+                        {
+                            grade += 1;
+                        }
+                    }
+                    else { grade += 1; }
                 }
-                
             }
+
             string g = System.Net.WebUtility.HtmlDecode("&quot;");
 
             if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
@@ -58,20 +69,22 @@ namespace HAPtest
             {
                 grade -= 5;
             }
+
+            bool upper = false;
             for (int i = 1; i < words.Count; i++)
             {
-                if(char.IsUpper(words[i][0]))
+                if (wLeaders.Contains(words[i]))
                 {
-                    grade += 1;
-                    break;
+                    grade += 4;
                 }
-
-            }
-
-
-            if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
-            {
-                grade += 3;
+                else if(char.IsUpper(words[i][0]))
+                {
+                    if (upper == false)
+                    {
+                        grade += 1;
+                        upper = true;
+                    }
+                }
             }
             if (text.Contains(')'))
             {
