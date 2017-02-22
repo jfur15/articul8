@@ -73,7 +73,8 @@ namespace HAPtest
                 
                 foreach (Paragraph p in A.paragraphs)
                 {
-                    richTextBox1.AppendText(p.Text + "\n\n\n");
+                    //Commented out for primitive output
+                    //richTextBox1.AppendText(p.Text + "\n\n\n");
                     tempRtb.AppendText(p.Text + "\n\n\n");
                 }
                 tempTab.Text = "Article " + idx + ": Paragraphs";
@@ -88,7 +89,8 @@ namespace HAPtest
                 {
                     foreach (Sentence s in p.sentences)
                     {
-                        richTextBox1.AppendText(s.Text + "\n\n\n");
+                        //Commented out for primitive output
+                        //richTextBox1.AppendText(s.Text + "\n\n\n");
                         tempRtb.AppendText(s.Text + "\n\n\n");
                     }
                     
@@ -109,7 +111,11 @@ namespace HAPtest
                 {
                     foreach (Sentence s in p.sentences)
                     {
-                        richTextBox1.AppendText(s.Text + "\n\n\n");
+                        //Primitive output
+                        if (s.Grade >= 4)
+                        {
+                            richTextBox1.AppendText(s.Text + "\n\n\n");
+                        }
                         tempView.Items.Add(new ListViewItem(new string[] {s.Grade.ToString(), s.Text }));
                         //tempRtb.AppendText(s.Text + "|" + s.Grade + "\n\n\n");
 

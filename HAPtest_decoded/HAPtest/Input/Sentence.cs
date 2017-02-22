@@ -86,10 +86,6 @@ namespace HAPtest
                     }
                 }
             }
-            if (text.Contains(')'))
-            {
-                grade -= 5;
-            }
 
 
         }
