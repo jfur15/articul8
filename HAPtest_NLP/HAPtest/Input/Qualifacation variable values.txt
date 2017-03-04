@@ -1,0 +1,16 @@
+Max = 20
+
+Has number += 4
+In quotes += 3
+Closer to beginning -= 1
+Closer to end += 1
+In parentheses -= 5
+Has name += 2
+
+*All variables/values to be adjusted
+
+-Seperate dates out
+-Bring average grade level down
+
+Check easy sentence level qualifications first (e.g. parentheses)
+Break down sentence into words to uncover deeper values to add to overall sentence score.
