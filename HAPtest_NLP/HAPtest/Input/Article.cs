@@ -12,6 +12,7 @@ namespace HAPtest
         private string uRL;
         public string title;
         public string URL { get { return uRL; } set { uRL = value; } }
+        
 
         public Article(string aURL)
         {

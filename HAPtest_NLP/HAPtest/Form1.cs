@@ -33,10 +33,11 @@ namespace HAPtest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Directory.SetCurrentDirectory("../..");
-
-             HAPtest.NLPObjs.cfier = CRFClassifier.getClassifierNoExceptions("/edu/stanford/nlp/models/ner/english.muc.7class.nodistsim.crf.ser.gz");
-            
+            var x = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory("../../../../..");
+            x = Directory.GetCurrentDirectory();
+            HAPtest.NLPObjs.cfier = CRFClassifier.getClassifierNoExceptions("edu\\stanford\\nlp\\models\\ner\\english.muc.7class.nodistsim.crf.ser.gz");
+            x = Directory.GetCurrentDirectory();
             HAPtest.NLPObjs.tizer = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
         }
 
@@ -178,9 +179,10 @@ namespace HAPtest
                                 foreach (XmlNode  node in tempXml.SelectNodes(xpa))
                                 {
                                     tempView.Items.Add(new ListViewItem(new string[] { cass, node.InnerText }));
-
+                                    richTextBox1.AppendText(node.InnerText + "   ");
                                 }
                             }
+                            richTextBox1.AppendText("\n");
 
                         }
 
@@ -216,10 +218,14 @@ namespace HAPtest
 
             // For each node in loaded webpage that is in paragraph tags (<p> </p>) add contained text to Article 
             // object's list of paragraphs
-            anArticle.title = System.Net.WebUtility.HtmlDecode(getHtmlWeb.DocumentNode.SelectSingleNode("//title").InnerText);
-            foreach (HtmlNode node in getHtmlWeb.DocumentNode.SelectNodes("//p | div[contains (@class, body)]"))
+            //anArticle.title = System.Net.WebUtility.HtmlDecode(getHtmlWeb.DocumentNode.SelectSingleNode("//title").InnerText);
+            HtmlNodeCollection n = getHtmlWeb.DocumentNode.SelectNodes("//p | div[contains (@class, body)]");
+            if (n.Count > 0)
             {
-                anArticle.AddParagraph(System.Net.WebUtility.HtmlDecode(node.InnerText));
+                foreach (HtmlNode node in n)
+                {
+                    anArticle.AddParagraph(System.Net.WebUtility.HtmlDecode(node.InnerText));
+                }
             }
         }
 
