@@ -38,7 +38,7 @@ namespace HAPtest
             x = Directory.GetCurrentDirectory();
             HAPtest.NLPObjs.cfier = CRFClassifier.getClassifierNoExceptions("edu\\stanford\\nlp\\models\\ner\\english.muc.7class.nodistsim.crf.ser.gz");
             x = Directory.GetCurrentDirectory();
-            HAPtest.NLPObjs.tizer = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
+            HAPtest.NLPObjs.tizer = PTBTokenizer.factory(new CoreLabelTokenFactory(), "asciiQuotes");
         }
 
         // Primary function: click button to process input

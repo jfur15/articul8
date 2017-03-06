@@ -107,6 +107,7 @@ namespace HAPtest
             grade += listLocations.Count + listPersons.Count;
 
             //Contains a quote?
+            bool x = text.Contains("“");
             if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
             {
                 grade += 3;
