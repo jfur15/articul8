@@ -104,24 +104,7 @@ namespace HAPtest
                 }
                 
             }
-
-            if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
-            {
-                grade += 3;
-            }
-            if (text.Contains(')'))
-            {
-                grade -= 5;
-            }
-            for (int i = 0; i < words.Count; i++)
-            {
-                if(char.IsUpper(words[i][0]))
-                {
-                    grade += 1;
-                    break;
-                }
-
-            }
+            grade += listLocations.Count + listPersons.Count;
 
             //Contains a quote?
             if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
