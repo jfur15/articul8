@@ -210,7 +210,6 @@
     <Compile Include="Input\Program.cs" />
     <Compile Include="NLPObjs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Input\Sentence.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -109,24 +109,7 @@ namespace HAPtest
                 tempRtb.Dock = DockStyle.Fill;
                 mainTempTab.TabPages.Add(tempTab);
 
-                //----------
-
-                tempTab = new TabPage();
-                tempRtb = new RichTextBox();
-
-                foreach (Paragraph p in A.paragraphs)
-                {
-                    foreach (Sentence s in p.sentences)
-                    {
-                       // richTextBox1.AppendText(s.Text + "\n\n\n");
-                        tempRtb.AppendText(s.Text + "\n\n\n");
-                    }
-                    
-                }
-                tempTab.Text = "Sentences";
-                tempTab.Controls.Add(tempRtb);
-                tempRtb.Dock = DockStyle.Fill;
-                mainTempTab.TabPages.Add(tempTab);
+                //---------
 
                 //----------
 
@@ -138,13 +121,12 @@ namespace HAPtest
                 tempView.Columns.Add(new ColumnHeader().Name = "Text");
                 foreach (Paragraph p in A.paragraphs)
                 {
-                    foreach (Sentence s in p.sentences)
-                    {
+
                         //richTextBox1.AppendText(s.Text + "\n\n\n");
-                        tempView.Items.Add(new ListViewItem(new string[] {s.Grade.ToString(), s.Text }));
+                        tempView.Items.Add(new ListViewItem(new string[] {p.Grade.ToString(), p.Text }));
                         //tempRtb.AppendText(s.Text + "|" + s.Grade + "\n\n\n");
 
-                    }
+                    
                    
                 }
                 tempView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -164,34 +146,33 @@ namespace HAPtest
                 tempView.Columns.Add(new ColumnHeader().Name = "Text");
                 foreach (Paragraph p in A.paragraphs)
                 {
-                    foreach (Sentence s in p.sentences)
+
+                    if (p.xmlText != "")
                     {
-                        if (s.xmlText != "")
+                        // s.xmlText = "<bullshit>" + s.xmlText + "</bullshit>";
+
+                        XmlDocument tempXml = new XmlDocument();
+                        string tempText = System.Net.WebUtility.HtmlDecode("<bullshit>" + p.xmlText + "</bullshit>");
+                            
+                        tempText = System.Text.RegularExpressions.Regex.Replace(tempText, "[^\u0000-\u007F]+", "");
+                        tempText = System.Text.RegularExpressions.Regex.Replace(tempText, "&", " and ");
+                        Console.WriteLine(tempText + "\n");
+                            
+                        tempXml.LoadXml(tempText);
+                        string[] cls = { "PERSON", "LOCATION", "ORGANIZATION", "DATE"};
+
+                        foreach (string cass in cls)
                         {
-                           // s.xmlText = "<bullshit>" + s.xmlText + "</bullshit>";
-
-                            XmlDocument tempXml = new XmlDocument();
-                            string tempText = System.Net.WebUtility.HtmlDecode("<bullshit>" + s.xmlText + "</bullshit>");
-                            
-                           tempText = System.Text.RegularExpressions.Regex.Replace(tempText, "[^\u0000-\u007F]+", "");
-                           tempText = System.Text.RegularExpressions.Regex.Replace(tempText, "&", " and ");
-                            Console.WriteLine(tempText + "\n");
-                            
-                            tempXml.LoadXml(tempText);
-                            string[] cls = { "PERSON", "LOCATION", "ORGANIZATION", "DATE"};
-
-                            foreach (string cass in cls)
+                            string xpa = "//" + cass;
+                            foreach (XmlNode  node in tempXml.SelectNodes(xpa))
                             {
-                                string xpa = "//" + cass;
-                                foreach (XmlNode  node in tempXml.SelectNodes(xpa))
-                                {
-                                    tempView.Items.Add(new ListViewItem(new string[] { cass, node.InnerText }));
-                                    richTextBox1.AppendText(node.InnerText + "   ");
-                                }
+                                tempView.Items.Add(new ListViewItem(new string[] { cass, node.InnerText }));
+                                richTextBox1.AppendText(node.InnerText + "   ");
                             }
-                            richTextBox1.AppendText("\n");
-
                         }
+                        richTextBox1.AppendText("\n");
+
+                        
 
                     }
 
@@ -221,23 +202,21 @@ namespace HAPtest
         {
             foreach (Article a in allArticles)
             {
-                foreach (Paragraph p in a.paragraphs)
-                {
-                    //This holds all sentences with a grade higher than 1
-                    List<Sentence> tempSentences = new List<Sentence>();
+                //This holds all sentences with a grade higher than 1
+                List<Paragraph> tempParagraphs = new List<Paragraph>();
                     
-                    for (int sidx = 0; sidx < p.sentences.Count; sidx++)
-                    {
-                        if (p.sentences[sidx].Grade > 0)
-                        { 
-                            tempSentences.Add(p.sentences[sidx]);
-                        }
+                for (int sidx = 0; sidx < a.paragraphs.Count; sidx++)
+                {
+                    if (a.paragraphs[sidx].Grade > 0)
+                    { 
+                        tempParagraphs.Add(a.paragraphs[sidx]);
                     }
-
-                    //Rewrites the original sentence list with the reconstructed one
-                    p.sentences = tempSentences;
                 }
+
+                //Rewrites the original sentence list with the reconstructed one
+                a.paragraphs = tempParagraphs;
             }
+            
         }
         // Retrieve text from webpage in paragraph form based on URL and assign to passed in Article object
         private void URLGet(Article anArticle)
