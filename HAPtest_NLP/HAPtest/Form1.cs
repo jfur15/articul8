@@ -81,6 +81,13 @@ namespace HAPtest
             for (int i = 0; i < allArticles.Count; i++) { URLGet(allArticles[i]); }
 
 
+
+
+            tempSentenceProcess(allArticles);
+
+
+
+
             // Format output to GUI. Create/Label a tab for each article and output text in paragraph form to RichTextBox in each.
             // Also sentence tabs with ordered scores and shit
             int idx = 1;
@@ -203,10 +210,35 @@ namespace HAPtest
                 tabControl1.TabPages.Add(mainTempContainer);              
                 idx++;
             }
+
         }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+       //Throws out all sentences with grade lower than 1
+       //Supposed to hold all comparison logic
+        private void tempSentenceProcess(List<Article> allArticles)
+        {
+            foreach (Article a in allArticles)
+            {
+                foreach (Paragraph p in a.paragraphs)
+                {
+                    //This holds all sentences with a grade higher than 1
+                    List<Sentence> tempSentences = new List<Sentence>();
+                    
+                    for (int sidx = 0; sidx < p.sentences.Count; sidx++)
+                    {
+                        if (p.sentences[sidx].Grade > 0)
+                        { 
+                            tempSentences.Add(p.sentences[sidx]);
+                        }
+                    }
+
+                    //Rewrites the original sentence list with the reconstructed one
+                    p.sentences = tempSentences;
+                }
+            }
+        }
         // Retrieve text from webpage in paragraph form based on URL and assign to passed in Article object
         private void URLGet(Article anArticle)
         {
