@@ -110,18 +110,19 @@ namespace HAPtest
 
             }*/
             grade += listLocations.Count + listPersons.Count;
+            grade += listLocations.Count + listPersons.Count;
 
             //Contains a quote?
             bool x = text.Contains("“");
             if (text.Contains("“") || text.Contains("”") || text.Contains("\""))
             {
-                grade += 3;
+                grade += 6;
             }
 
 
             if (text.Contains(')'))
             {
-                grade -= 5;
+                grade -= 10;
             }
 
             grade += listDates.Count();

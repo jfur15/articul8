@@ -44,7 +44,9 @@ namespace HAPtest
         // Primary function: click button to process input
         private void button1_Click(object sender, EventArgs e)
         {
-           
+
+            List<ComparisonPool> pooledParagraphs = new List<ComparisonPool>();
+
             // Create a list to house all articles inputted
             List<Article> allArticles = new List<Article>();
 
@@ -164,13 +166,44 @@ namespace HAPtest
                         foreach (string cass in cls)
                         {
                             string xpa = "//" + cass;
-                            foreach (XmlNode  node in tempXml.SelectNodes(xpa))
+                            foreach (XmlNode node in tempXml.SelectNodes(xpa))
                             {
                                 tempView.Items.Add(new ListViewItem(new string[] { cass, node.InnerText }));
-                                richTextBox1.AppendText(node.InnerText + "   ");
+                                if(cass == "PERSON" || cass == "LOCATION" || cass == "ORGANIZATION")
+                                {
+                                    foreach (ComparisonPool C in pooledParagraphs)
+                                    {
+                                        if (C.Classifier == node.InnerText)
+                                        {
+                                            C.addParagraph(p);
+                                            break;
+                                        }
+                                    }
+                                    ComparisonPool temp = new ComparisonPool(node.InnerText);
+                                    pooledParagraphs.Add(temp);
+                                    temp.addParagraph(p);
+                                }
+                                    //foreach CPool in PParagraphs {
+                                    // Determine first key subject in paragraph
+                                    // Is there already a CPool for this subject?
+                                    // Yes: Add paragraph to list
+                                    // No: Create new list based on subject
+                                    //}
+
+                                    // Delete lists with < 5 Paragraphs
+
+                                    // foreach pool/list compare each paragraph to each other paragraph {
+                                    // all subjects the same?
+                                    // Yes: compare scores, take winner, delete loser, CONTINUE
+                                    // No: Continue
+                                    //}
+                                    //// PoolParagraphs(p, node.InnerText);
+                                }
+
+                                //richTextBox1.AppendText(node.InnerText + "   ");
                             }
                         }
-                        richTextBox1.AppendText("\n");
+                        //richTextBox1.AppendText("\n");
 
                         
 
@@ -207,7 +240,7 @@ namespace HAPtest
                     
                 for (int sidx = 0; sidx < a.paragraphs.Count; sidx++)
                 {
-                    if (a.paragraphs[sidx].Grade > 0)
+                    if (a.paragraphs[sidx].Grade > 1)
                     { 
                         tempParagraphs.Add(a.paragraphs[sidx]);
                     }
@@ -268,6 +301,13 @@ namespace HAPtest
             }
             return tempo;
         }
+
+
+
+        //private List<List<Paragraph>> PoolParagraphs(Paragraph current, string keySubject)
+        //{
+            
+        //}
     }
 }
 
