@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace HAPtest
 {
-    class Paragraph
+    public class Paragraph
     {
         private string text;
         public string xmlText = "";
@@ -29,7 +29,7 @@ namespace HAPtest
             listOrganizations = new List<string>();
             listPersons = new List<string>();
             listDates = new List<string>();
-            xmlText = HAPtest.NLPObjs.cfier.classifyWithInlineXML(text);
+            xmlText = HAPtest.NLPObjs.cfier.classifyWithInlineXML(System.Text.RegularExpressions.Regex.Replace(text, "<|>", ""));
             entitizeParagraph();
 
             gradeParagraph();
@@ -82,6 +82,7 @@ namespace HAPtest
 
                 tempText = System.Text.RegularExpressions.Regex.Replace(tempText, "[^\u0000-\u007F]+", "");
                 tempText = System.Text.RegularExpressions.Regex.Replace(tempText, "&", " and ");
+
                 tempXml.LoadXml(tempText);
 
                 List<string>[] cls = { listDates, listPersons, listLocations, listOrganizations };
@@ -128,6 +129,16 @@ namespace HAPtest
             grade += listDates.Count();
 
 
+        }
+
+        public List<string> listClassifiers()
+        {
+            List<string> classes = new List<string>();
+            classes.AddRange(listOrganizations);
+            classes.AddRange(listLocations);
+            classes.AddRange(listDates);
+            classes.AddRange(listPersons);
+            return classes;
         }
 
     }

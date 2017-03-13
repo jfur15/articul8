@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace HAPtest
 {
-    public class ComparisonPool
+    class ComparisonPool
     {
         string classifier;
         List<Paragraph> pool;
 
         public string Classifier { get { return classifier; } }
+        public List<Paragraph> Pool { get { return pool; } set { pool = value; } }
 
         public ComparisonPool(string subject)
         {

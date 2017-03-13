@@ -53,6 +53,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.clearButton = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.Articles.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -279,19 +280,30 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(189, 8);
+            this.clearButton.Location = new System.Drawing.Point(391, 8);
             this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(691, 34);
+            this.clearButton.Size = new System.Drawing.Size(489, 34);
             this.clearButton.TabIndex = 8;
             this.clearButton.Text = "Clear";
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(190, 8);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(171, 17);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "PRELOAD TRUMPARTILCES";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(892, 531);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Articles);
@@ -305,6 +317,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -335,6 +348,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
