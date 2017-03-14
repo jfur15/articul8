@@ -52,7 +52,7 @@ namespace HAPtest
        " http://www.politicususa.com/2017/02/24/trump-hide-truth-banning-media-write-scandal-press-briefing.html",
 
 
-        "http://www.zerohedge.com/news/2017-02-24/white-house-bans-cnn-nyt-participating-media-briefing",
+       // "http://www.zerohedge.com/news/2017-02-24/white-house-bans-cnn-nyt-participating-media-briefing",
 
 
        " http://www.politico.com/story/2017/02/reporters-blocked-white-house-gaggle-235360",
@@ -73,7 +73,7 @@ namespace HAPtest
       "  https://www.theguardian.com/us-news/2017/feb/24/media-blocked-white-house-briefing-sean-spicer",
 
 
-       " http://www.mediaite.com/online/cnn-and-other-media-outlets-blocked-from-white-house-gaggle/",
+       //" http://www.mediaite.com/online/cnn-and-other-media-outlets-blocked-from-white-house-gaggle/",
 
 
 
@@ -346,7 +346,7 @@ namespace HAPtest
                     tempPool = new List<Paragraph>();
                     foreach (Paragraph p2 in C.Pool.ToList())
                     {
-                        if (p1.Text != p2.Text)
+                        if (p1.Text != p2.Text && !p1.Deleted && !p2.Deleted)
                         {
                             if (classifierCompare(p1.listClassifiers(), p2.listClassifiers()))
                             {
@@ -354,13 +354,13 @@ namespace HAPtest
                                 {
                                     tempParagraph = p1;
                                     //delete p2
-                                    tempPool.Add(p2);
+                                    p2.Deleted = true;
                                 }
                                 else if (p2.Grade > p1.Grade)
                                 {
                                     tempParagraph = p2;
                                     //delete p1
-                                    tempPool.Add(p1);
+                                    p1.Deleted = true;
                                 }
                                 else
                                 {
@@ -369,13 +369,13 @@ namespace HAPtest
 
                                         tempParagraph = p2;
                                         //delete p1
-                                        tempPool.Add(p1);
+                                        p1.Deleted = true;
                                     }
                                     else
                                     {
                                         tempParagraph = p1;
                                         //delete p2
-                                        tempPool.Add(p2);
+                                        p2.Deleted = true;
                                     }
                                 }
                             }
@@ -394,7 +394,7 @@ namespace HAPtest
             return finalParagraphs;
         }
 
-        //Throws out all sentences with grade lower than 1
+        //Throws out all pargraphs with grade lower than 1
         //Supposed to hold all comparison logic
         private void tempSentenceProcess(List<Article> allArticles)
         {
@@ -405,12 +405,12 @@ namespace HAPtest
 
                 for (int sidx = 0; sidx < a.paragraphs.Count; sidx++)
                 {
-                    if (a.paragraphs[sidx].Grade > 1)
+                    if (a.paragraphs[sidx].Grade > 1 && !tempParagraphs.Contains(a.paragraphs[sidx]))
                     {
                         tempParagraphs.Add(a.paragraphs[sidx]);
                     }
                 }
-
+                
                 //Rewrites the original sentence list with the reconstructed one
                 a.paragraphs = tempParagraphs;
             }

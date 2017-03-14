@@ -14,6 +14,7 @@ namespace HAPtest
     public class Paragraph
     {
         private string text;
+        private bool deleted;
         public string xmlText = "";
         int grade = 0;
         public List<string> listLocations;
@@ -21,10 +22,12 @@ namespace HAPtest
         public List<string> listPersons;
         public List<string> listDates;
         public string Text { get { return text; } set { text = value; } }
+        public bool Deleted { get { return deleted; } set { deleted = value; } }
         public int Grade { get { return grade; } }
         public Paragraph(string aParagraph)
         {
             text = aParagraph;
+            deleted = false;
             listLocations = new List<string>();
             listOrganizations = new List<string>();
             listPersons = new List<string>();
